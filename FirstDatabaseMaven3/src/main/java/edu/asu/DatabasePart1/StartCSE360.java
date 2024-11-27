@@ -20,6 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class StartCSE360 extends Application {
     private static final DatabaseHelper databaseHelper = new DatabaseHelper();
     private static String adminEmail;
+    private static String studentEmail;
 
     
     @Override
@@ -84,7 +85,7 @@ public class StartCSE360 extends Application {
                 if (databaseHelper.login(emailField.getText(), passwordField.getText(),Role.student)) {
                     showStudentOptions(primaryStage, emailField.getText());
                 } else if (databaseHelper.login(emailField.getText(), passwordField.getText(), Role.admin)) {
-                    Admin.main(primaryStage, emailField.getText());  // Open admin options
+                    Admin.main(primaryStage, emailField.getText());  
                 } else if(databaseHelper.login(emailField.getText(),passwordField.getText(),Role.instructor)) {
                     Instructor.main(primaryStage,emailField.getText());
                 }else {
@@ -750,7 +751,7 @@ public class StartCSE360 extends Application {
         primaryStage.setScene(new Scene(layout, 600, 400));
     }
     
-    static void showArticleSearchScreen(Stage primaryStage) {
+    static void showArticleSearchScreen(Stage primaryStage, String email) {
         VBox searchLayout = new VBox(10);
         searchLayout.setStyle("-fx-padding: 10;");
 
@@ -769,10 +770,10 @@ public class StartCSE360 extends Application {
         //int ID = Integer.parseInt(IDField.getText());
 
         Button searchButton = new Button("Search");
-        searchButton.setOnAction(e -> performArticleSearch(primaryStage, titleField.getText(), authorsField.getText(), keywordsField.getText(), IDField.getText()));
+        searchButton.setOnAction(e -> performArticleSearch(primaryStage, titleField.getText(), authorsField.getText(), keywordsField.getText(), IDField.getText(), email));
         
         Button backButton = new Button("Back");
-        backButton.setOnAction(e -> Student.main(primaryStage, adminEmail));
+        backButton.setOnAction(e -> showStudentOptions(primaryStage, email));
 
         searchLayout.getChildren().addAll(searchLabel, titleField, authorsField, keywordsField, IDField, searchButton,backButton);
 
@@ -780,7 +781,7 @@ public class StartCSE360 extends Application {
     }
     
     @SuppressWarnings("unchecked")
-	private static void performArticleSearch(Stage primaryStage, String title, String authors, String keywords, String ID) {
+	private static void performArticleSearch(Stage primaryStage, String title, String authors, String keywords, String ID, String email) {
         try {
             List<Article> articles = databaseHelper.searchArticles(title, authors, keywords, ID);
             ObservableList<Article> articleList = FXCollections.observableArrayList(articles);
@@ -809,16 +810,16 @@ public class StartCSE360 extends Application {
             abstractColumn.setCellValueFactory(new PropertyValueFactory<>("setOfKeywords"));
             
             Button backButton = new Button("Back");
-            backButton.setOnAction(e -> Student.main(primaryStage, adminEmail));
+            backButton.setOnAction(e -> showStudentOptions(primaryStage, email));
             
             Button searchButton = new Button("Search");
-            searchButton.setOnAction(e -> showArticleSearchScreen(primaryStage));
+            searchButton.setOnAction(e -> showArticleSearchScreen(primaryStage, email));
             
             TextField slnoField = new TextField();
             slnoField.setPromptText("Sequence Number");
             
             Button viewButton = new Button("View Article");
-            viewButton.setOnAction(e -> displayArticleScreen(primaryStage, articles, slnoField.getText()));
+            viewButton.setOnAction(e -> displayArticleScreen(primaryStage, articles, slnoField.getText(), email));
 
             tableView.setItems(articleList);
             tableView.getColumns().addAll(serialNumberColumn,titleColumn, authorsColumn, abstractColumn);
@@ -836,7 +837,7 @@ public class StartCSE360 extends Application {
     }
     
     @SuppressWarnings("unchecked")
-	private static void displayArticleScreen(Stage primaryStage, List<Article> articles, String serialNumber) {
+	private static void displayArticleScreen(Stage primaryStage, List<Article> articles, String serialNumber, String email) {
         int serialNumber1 = Integer.parseInt(serialNumber);
 		ObservableList<Article> articleList = FXCollections.observableArrayList(articles);
 
@@ -880,12 +881,12 @@ public class StartCSE360 extends Application {
 		backButton.setOnAction(e -> Student.main(primaryStage, adminEmail));
 
 		Button searchButton = new Button("Search");
-		searchButton.setOnAction(e -> showArticleSearchScreen(primaryStage));
+		searchButton.setOnAction(e -> showArticleSearchScreen(primaryStage, email));
 		TextField slnoField = new TextField();
         slnoField.setPromptText("Sequence Number");
         
         Button viewButton = new Button("View Article");
-        viewButton.setOnAction(e -> displayArticleScreen(primaryStage, articles, slnoField.getText()));
+        viewButton.setOnAction(e -> displayArticleScreen(primaryStage, articles, slnoField.getText(), email));
 
 		tableView.setItems(articleList);
 		tableView.getColumns().addAll(IDColumn,levelColumn, titleColumn, authorsColumn,abstractColumn, keywordsColumn,bodyColumn,refColumn,groupColumn);
@@ -911,7 +912,7 @@ public class StartCSE360 extends Application {
 
         searchArticleButton.setOnAction(e -> {
             // Placeholder for search functionality
-            showArticleSearchScreen(primaryStage);
+            showArticleSearchScreen(primaryStage, email);
         });
 
         sendGenericMessageButton.setOnAction(e -> Student.sendGenericHelpMessage(email));
