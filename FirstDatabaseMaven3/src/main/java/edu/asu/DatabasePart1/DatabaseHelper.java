@@ -13,7 +13,7 @@ class DatabaseHelper {
 	static final String USER = "sa"; 
 	static final String PASS = ""; 
 
-	private static Connection connection;
+	static Connection connection;
 	private static Statement statement = null; 
 	
 	public void connectToDatabase() throws SQLException {
@@ -41,7 +41,7 @@ class DatabaseHelper {
         statement.execute(specialGroupMembersTable);
     }
 
-	private void createTables() throws SQLException {
+	void createTables() throws SQLException {
 
 		String userTable = "CREATE TABLE IF NOT EXISTS cse360users ("
 	            + "id INT AUTO_INCREMENT PRIMARY KEY, "
@@ -60,18 +60,21 @@ class DatabaseHelper {
 	}
 	
 	public static void storeGenericMessage(String message, String email) {
-		String query = "UPDATE cse360users SET genericMessage = ? WHERE email = ?";
-		try(PreparedStatement pstmt = connection.prepareStatement(query)){
-			pstmt.setString(1, message);
-			pstmt.setString(2, email);
-			pstmt.executeUpdate();
-			System.out.println("Generic message stored for "+email);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.print("Error in storeGenericMessage");
-		}
-		
+	    String query = "UPDATE cse360users SET genericMessage = ? WHERE email = ?";
+	    try {
+	        if (connection == null || connection.isClosed()) {
+	            throw new SQLException("Connection is null or closed. Initialize the database connection.");
+	        }
+	        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	            pstmt.setString(1, message);
+	            pstmt.setString(2, email);
+	            pstmt.executeUpdate();
+	            System.out.println("Generic message stored for " + email);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.print("Error in storeGenericMessage");
+	    }
 	}
 	
 	public static void storeSpecificMessage(String message, String email) {
@@ -205,13 +208,13 @@ class DatabaseHelper {
 		return true;
 	}
 	
-	public static void register(String email, String password, Role role,String otp ,String userEmail, String firstName, String middleName, String lastName, String preferredName) throws SQLException {
+	public static void register(String email, String password, Role role,String otp ,String userEmail, String firstName, String middleName, String lastName, String preferredName, String genericMessage, String specificMessage) throws SQLException {
 		if (isEmailRegistered(email)) {
 	        throw new SQLException("User with this email already exists.");
 	    }
 	    String evaluatePass = PasswordEvaluator.evaluatePassword(password);
 	    if (evaluatePass.equals("Success")) {
-	        String insertUser = "INSERT INTO cse360users (email, password, role, otp, userEmail, firstName, middleName, lastName, preferredName) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	        String insertUser = "INSERT INTO cse360users (email, password, role, otp, userEmail, firstName, middleName, lastName, preferredName, genericMessage, specificMessage) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	        try (PreparedStatement pstmt = connection.prepareStatement(insertUser)) {
 	            pstmt.setString(1, email);
 	            pstmt.setString(2, password);
@@ -222,6 +225,8 @@ class DatabaseHelper {
 	            pstmt.setString(7, middleName);
 	            pstmt.setString(8, lastName);
 	            pstmt.setString(9, preferredName);
+	            pstmt.setString(10, genericMessage);
+	            pstmt.setString(11, specificMessage);
 	            pstmt.executeUpdate();
 	            System.out.println("User with first name "+firstName+ " and last name"+lastName+" has been registered");
 		            
