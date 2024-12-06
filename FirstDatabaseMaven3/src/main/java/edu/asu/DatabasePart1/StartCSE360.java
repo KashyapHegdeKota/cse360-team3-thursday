@@ -168,7 +168,7 @@ public class StartCSE360 extends Application {
 
                                 DatabaseHelper db = new DatabaseHelper();
                                 db.connectToDatabase();
-                                DatabaseHelper.register(emailField.getText(), password, Role.instructor, null, emailField.getText(), firstName, middleName, lastName, preferredName);
+                                DatabaseHelper.register(emailField.getText(), password, Role.instructor, null, emailField.getText(), firstName, middleName, lastName, preferredName, null, null);
 
                                 if (!groupName.isEmpty()) {
                                     boolean isFirstInstructor = DatabaseHelper.isFirstInstructorInGroup(groupName);
@@ -189,7 +189,7 @@ public class StartCSE360 extends Application {
                                 String middleName = middleField.getText();
                                 String lastName = lastField.getText();
                                 String preferredName = preferredField.getText();
-                                DatabaseHelper.register(emailField.getText(), password, Role.student, null, emailField.getText(), firstName, middleName, lastName, preferredName);
+                                DatabaseHelper.register(emailField.getText(), password, Role.student, null, emailField.getText(), firstName, middleName, lastName, preferredName, null, null);
 
                                 if (!groupField.getText().trim().isEmpty()) {
                                     DatabaseHelper.addMemberToGroup(groupField.getText().trim(), emailField.getText(), Role.student, true, false);
@@ -247,7 +247,7 @@ public class StartCSE360 extends Application {
 						String middleName = middleField.getText();
 						String lastName = lastField.getText();
 						String preferredName = preferredField.getText();
-						DatabaseHelper.register(adminEmailField.getText(), adminPasswordField.getText(), Role.admin, "1",adminEmailField.getText(),firstName, middleName, lastName, preferredName);
+						DatabaseHelper.register(adminEmailField.getText(), adminPasswordField.getText(), Role.admin, "1",adminEmailField.getText(),firstName, middleName, lastName, preferredName, null, null);
 					}catch(SQLException e1) {
 						e1.printStackTrace();
 					}
@@ -305,9 +305,13 @@ public class StartCSE360 extends Application {
     	lastColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
     	TableColumn<User,String> preferredColumn = new TableColumn<>("Preferred Name");
     	preferredColumn.setCellValueFactory(new PropertyValueFactory<>("preferredName"));
-
-    	userTable.getColumns().addAll(idColumn, emailColumn, roleColumn,firstColumn,middleColumn,lastColumn,preferredColumn);
     	
+    	TableColumn<User,String> genericmessageColumn = new TableColumn<>("Generic Message");
+    	preferredColumn.setCellValueFactory(new PropertyValueFactory<>("Generic Message"));
+    	TableColumn<User,String> specificMessageColumn = new TableColumn<>("Specific Message");
+    	preferredColumn.setCellValueFactory(new PropertyValueFactory<>("Specific Message"));
+
+    	userTable.getColumns().addAll(idColumn, emailColumn, roleColumn,firstColumn,middleColumn,lastColumn,preferredColumn, genericmessageColumn, specificMessageColumn);
         try {
         	ObservableList<User> userList = FXCollections.observableArrayList(DatabaseHelper.displayUsersByAdmin());
         	userTable.setItems(userList);
