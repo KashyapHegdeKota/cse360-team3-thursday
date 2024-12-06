@@ -1,4 +1,4 @@
-	package edu.asu.DatabasePart1;
+package edu.asu.DatabasePart1;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -21,7 +21,7 @@ public class Admin {
 
     static void showAdminOptions(Stage primaryStage, String email) {
     	Optional<String> choice = showTextInputDialog(
-    	        "Enter your choice (1-12):\n" +
+    	        "Enter your choice (1-15):\n" +
     	        "1. Invite an individual to join the application\n" +
     	        "2. Reset a user account\n" +
     	        "3. Delete a user account\n" +
@@ -187,7 +187,7 @@ public class Admin {
         });
     }
 
-    private static void deleteUser() throws SQLException {
+    static void deleteUser() throws SQLException {
         Optional<String> email = showTextInputDialog("Enter the username you want to delete:");
         email.ifPresent(userEmail -> {
             Optional<String> confirmation = showTextInputDialog("Are you sure? Type 'yes' to confirm:");
@@ -256,7 +256,7 @@ public class Admin {
 
 
 
-    private static char[] generateOTP() {
+    static char[] generateOTP() {
         char[] otp = new char[5];
         Random r = new Random();
         for (int i = 0; i < 5; i++) {
@@ -268,7 +268,7 @@ public class Admin {
     	return 1;
     }
 
-    private static String charToStringOTP(char[] otp) {
+    static String charToStringOTP(char[] otp) {
         return new String(otp);
     }
 
