@@ -53,9 +53,9 @@ class DatabaseHelper {
 	            + "firstName VARCHAR(255), "
 	    		+ "lastName VARCHAR(255),"
 	            + "middleName VARCHAR(255),"
-	    		+ "preferredName TEXT,"
-	            + "genericMessage TEXT,"
-	    		+ "specificMessage TEXT )";
+	    		+ "preferredName VARCHAR(255),"
+	            + "genericMessage VARCHAR(255),"
+	    		+ "specificMessage VARCHAR(255) )";
 	    statement.execute(userTable);
 	}
 	

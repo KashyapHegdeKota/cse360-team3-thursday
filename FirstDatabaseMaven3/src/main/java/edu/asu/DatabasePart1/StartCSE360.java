@@ -307,9 +307,9 @@ public class StartCSE360 extends Application {
     	preferredColumn.setCellValueFactory(new PropertyValueFactory<>("preferredName"));
     	
     	TableColumn<User,String> genericmessageColumn = new TableColumn<>("Generic Message");
-    	preferredColumn.setCellValueFactory(new PropertyValueFactory<>("Generic Message"));
+    	genericmessageColumn.setCellValueFactory(new PropertyValueFactory<>("genericMessage"));
     	TableColumn<User,String> specificMessageColumn = new TableColumn<>("Specific Message");
-    	preferredColumn.setCellValueFactory(new PropertyValueFactory<>("Specific Message"));
+    	specificMessageColumn.setCellValueFactory(new PropertyValueFactory<>("specificMessage"));
 
     	userTable.getColumns().addAll(idColumn, emailColumn, roleColumn,firstColumn,middleColumn,lastColumn,preferredColumn, genericmessageColumn, specificMessageColumn);
         try {
