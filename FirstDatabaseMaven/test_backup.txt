@@ -1,4 +1,0 @@
-1732751768727,Intermediate,Hi,jbfkshebf,fjksehfuijkeh,hfuiehsuifh,fdXtBN7gz3OgdRawyenNvA==,uhfesuioehfuoi,Python
-54321,Advanced,Grouped Article,Group Author,Abstract,Keywords,V7HBpxTvXp2jR0A26H0P+w==,References,Java/Python
-12345,Easy,Test Title,Author Name,Test Abstract,Keywords,xV1m2mZeb38OWTZNpUImSA==,References,Group
-67890,Intermediate,Intermediate Article,Another Author,Abstract,Some Keywords,V7HBpxTvXp2jR0A26H0P+w==,References,Group
